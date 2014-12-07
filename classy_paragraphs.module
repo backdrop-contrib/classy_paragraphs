@@ -10,7 +10,6 @@ function classy_paragraphs_field_widget_info() {
       'field types' => array('list_text'),
       'behaviors' => array(
         'multiple values' => FIELD_BEHAVIOR_CUSTOM,
-        'default value' => FIELD_BEHAVIOR_NONE,
       ),
     ),
   );
@@ -20,26 +19,56 @@ function classy_paragraphs_field_widget_info() {
  * Implementation of hook_field_widget_form().
  */
 function classy_paragraphs_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  $widget = $instance['widget'];
-  $settings = $widget['settings'];
-  switch ($widget['type']) {
+  // Abstract over the actual field columns, to allow different field types to
+  // reuse those widgets.
+  $value_key = key($field['columns']);
+
+  $multiple = $field['cardinality'] > 1 || $field['cardinality'] == FIELD_CARDINALITY_UNLIMITED;
+  $required = $element['#required'];
+  $has_value = isset($items[0][$value_key]);
+  $properties = _options_properties('select', $multiple, $required, $has_value);
+
+  $entity_type = $element['#entity_type'];
+  $entity = $element['#entity'];
+
+  // Prepare the list of options.
+  $options = classy_paragraphs_get_options($field, $instance);
+  // Put current field values in shape.
+  $default_value = _options_storage_to_form($items, $options, $value_key, $properties);
+
+  switch ($instance['widget']['type']) {
     case 'classy_paragraphs_select':
-      $options = classy_paragraphs_get_options($field, $instance);
       $element += array(
         '#type' => 'select',
+        '#default_value' => $default_value,
+        // Do not display a 'multiple' select box if there is only one option.
+        '#multiple' => $multiple && count($options) > 1,
         '#options' => $options,
-        '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
       );
       break;
   }
 
-  return array('value' => $element);
+  $element += array(
+    '#value_key' => $value_key,
+    '#element_validate' => array('options_field_widget_validate'),
+    '#properties' => $properties,
+  );
+  return $element;
 }
 
+/**
+ * Get list of options from other modules.
+ *
+ * @param $field
+ * @param $instance
+ * @return array
+ */
 function classy_paragraphs_get_options($field, $instance) {
   $options = array();
   $options = module_invoke_all('classy_paragraphs_list_options', $options, $field, $instance);
   drupal_alter('classy_paragraphs_list_options', $options);
+
+
   return $options;
 }
 
