@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function classy_paragraphs_field_widget_info() {
+  return array(
+    'classy_paragraphs_select' => array(
+      'label' => t('Classy paragraphs select'),
+      'field types' => array('list_text'),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+        'default value' => FIELD_BEHAVIOR_NONE,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_field_widget_form().
+ */
+function classy_paragraphs_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $widget = $instance['widget'];
+  $settings = $widget['settings'];
+  switch ($widget['type']) {
+    case 'classy_paragraphs_select':
+      $options = classy_paragraphs_get_options($field, $instance);
+      $element += array(
+        '#type' => 'select',
+        '#options' => $options,
+        '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
+      );
+      break;
+  }
+
+  return array('value' => $element);
+}
+
+function classy_paragraphs_get_options($field, $instance) {
+  $options = array();
+  $options = module_invoke_all('classy_paragraphs_list_options', $options, $field, $instance);
+  drupal_alter('classy_paragraphs_list_options', $options);
+  return $options;
+}
+
+/**
+ * Implements hook_classy_paragraph_list_options().
+ */
+function classy_paragraphs_classy_paragraphs_list_options($options, $field, $instance) {
+  $options['loud'] = t('Loud');
+  $options['soft'] = t('Soft');
+
+  return $options;
+}
