@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class ClassyParagraphsTestTestFeatureCase
+ *
+ * Ensure that the test features has been installed.
+ */
 class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
 
   public static function getInfo() {
@@ -12,10 +17,14 @@ class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
 
   public function setUp() {
     parent::setUp('classy_paragraphs_test');
+    // Log user in.
     $web_user = $this->drupalCreateUser(array('bypass node access', 'administer content types', 'administer paragraphs bundles'));
     $this->drupalLogin($web_user);
   }
 
+  /**
+   * Test content type stored in features.
+   */
   public function testClassyParagraphsNodeType() {
     $node_types = node_type_get_types();
     $this->assertTrue(isset($node_types['cp_landing_page']), 'Node type landing page is available.');
@@ -24,10 +33,14 @@ class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
     $this->assertRaw('Paragraphs', 'Found paragraphs field');
   }
 
+  /**
+   * Test paragraph type and custom fields.
+   */
   public function testClassyParagraphsCheckParagraph() {
+    // Get to paragraphs admin page.
     $this->drupalGet('admin/structure/paragraphs');
     $this->assertText('Content (cp_content)', 'Found test paragraph');
-
+    // Ensure fields are present.
     $this->drupalGet('admin/structure/paragraphs/cp-content/fields');
     $this->assertText('Classy paragraphs select', 'Found classy paragraphs widget.');
     $this->assertText('field_cp_class', 'Found class field.');
@@ -35,15 +48,17 @@ class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
   }
 }
 
-
-
-/*
-class ClassyParagraphsTestCase extends DrupalWebTestCase {
+/**
+ * Class ClassyParagraphsTestCase
+ *
+ * Ensure that the markup appears.
+ */
+class ClassyParagraphsTestClassCase extends DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => 'Classy Paragraphs',
-      'description' => 'Ensure that the Classy Paragraphs widget install.',
+      'name' => 'Test class mark',
+      'description' => 'Ensure that the class appears in markup.',
       'group' => 'Classy Paragraphs',
     );
   }
@@ -52,18 +67,26 @@ class ClassyParagraphsTestCase extends DrupalWebTestCase {
     parent::setUp('classy_paragraphs_test');
   }
 
+  /**
+   *
+   */
+  public function testClassyParagraphsCheckMarkup() {
+    $css_class = 'test-soft-value';
+    $node = $this->drupalCreateNode(array('type' => 'cp_landing_page'));
 
-  public function testClassyParagraphsNodeType() {
-    $node_types = node_type_get_types();
+    $entity = entity_create('paragraphs_item', array('bundle' => 'cp_content', 'field_name' => 'field_cp_paragraphs'));
+    $entity->field_cp_class[LANGUAGE_NONE][0]['value'] = $css_class;
+    $entity->field_cp_body[LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $entity->setHostEntity('node', $node);
+    $entity->save();
 
-    $this->assertTrue(isset($node_types['cp_landing_page']), 'Node type landing page is available.');
+    $this->drupalGet('node/' . $node->nid);
 
-    $web_user = $this->drupalCreateUser(array('bypass node access', 'administer content types'));
+    $class = $this->xpath('//*[contains(@class, "' . $css_class . '")]');
+    $this->assertTrue(count($class) == 1, $css_class . ' class found.');
+
+    $web_user = $this->drupalCreateUser(array('bypass node access', 'administer content types', 'administer paragraphs bundles'));
     $this->drupalLogin($web_user);
-
-    $this->drupalGet('node/add/cp-landing-page');
-
+    $this->drupalGet('node/' . $node->nid . '/edit');
   }
 }
-*/
-

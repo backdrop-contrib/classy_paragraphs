@@ -88,6 +88,7 @@ function classy_paragraphs_preprocess_entity(&$variables) {
     }
   }
 }
+
 /**
  * Implements hook_classy_paragraph_list_options().
  */
