@@ -1,7 +1,7 @@
 name = Classy Paragraphs
 description = Allows an editor to apply a class to paragraphs.
-package = Panels
+package = Classy paragraphs
 dependencies[] = paragraphs
 core = 7.x
 
-files[] = classy_paragraphs.test
+files[] = tests/classy_paragraphs.test

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Classy paragraphs test feature.
+ */
+
+include_once 'classy_paragraphs_test.features.inc';

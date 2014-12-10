@@ -1,0 +1,69 @@
+<?php
+
+class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Test Classy paragraphs feature module',
+      'description' => 'Ensure that the Classy paragraphs feature installs',
+      'group' => 'Classy Paragraphs',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('classy_paragraphs_test');
+    $web_user = $this->drupalCreateUser(array('bypass node access', 'administer content types', 'administer paragraphs bundles'));
+    $this->drupalLogin($web_user);
+  }
+
+  public function testClassyParagraphsNodeType() {
+    $node_types = node_type_get_types();
+    $this->assertTrue(isset($node_types['cp_landing_page']), 'Node type landing page is available.');
+    // Go to test content type.
+    $this->drupalGet('node/add/cp-landing-page');
+    $this->assertRaw('Paragraphs', 'Found paragraphs field');
+  }
+
+  public function testClassyParagraphsCheckParagraph() {
+    $this->drupalGet('admin/structure/paragraphs');
+    $this->assertText('Content (cp_content)', 'Found test paragraph');
+
+    $this->drupalGet('admin/structure/paragraphs/cp-content/fields');
+    $this->assertText('Classy paragraphs select', 'Found classy paragraphs widget.');
+    $this->assertText('field_cp_class', 'Found class field.');
+    $this->assertText('field_cp_body', 'Found body field.');
+  }
+}
+
+
+
+/*
+class ClassyParagraphsTestCase extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Classy Paragraphs',
+      'description' => 'Ensure that the Classy Paragraphs widget install.',
+      'group' => 'Classy Paragraphs',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('classy_paragraphs_test');
+  }
+
+
+  public function testClassyParagraphsNodeType() {
+    $node_types = node_type_get_types();
+
+    $this->assertTrue(isset($node_types['cp_landing_page']), 'Node type landing page is available.');
+
+    $web_user = $this->drupalCreateUser(array('bypass node access', 'administer content types'));
+    $this->drupalLogin($web_user);
+
+    $this->drupalGet('node/add/cp-landing-page');
+
+  }
+}
+*/
+
