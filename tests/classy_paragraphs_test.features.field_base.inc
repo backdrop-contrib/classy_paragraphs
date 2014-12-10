@@ -39,13 +39,13 @@ function classy_paragraphs_test_field_default_field_bases() {
     'type' => 'text_with_summary',
   );
 
-  // Exported field_base: 'field_cp_body'
-  $field_bases['field_cp_body'] = array(
+  // Exported field_base: 'field_cp_test_body'
+  $field_bases['field_cp_test_body'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_cp_body',
+    'field_name' => 'field_cp_test_body',
     'foreign keys' => array(
       'format' => array(
         'columns' => array(
@@ -66,13 +66,13 @@ function classy_paragraphs_test_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_cp_class'
-  $field_bases['field_cp_class'] = array(
+  // Exported field_base: 'field_cp_test_class'
+  $field_bases['field_cp_test_class'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_cp_class',
+    'field_name' => 'field_cp_test_class',
     'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
@@ -89,13 +89,13 @@ function classy_paragraphs_test_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_cp_paragraphs'
-  $field_bases['field_cp_paragraphs'] = array(
+  // Exported field_base: 'field_cp_test_paragraphs'
+  $field_bases['field_cp_test_paragraphs'] = array(
     'active' => 1,
-    'cardinality' => -1,
+    'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_cp_paragraphs',
+    'field_name' => 'field_cp_test_paragraphs',
     'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,

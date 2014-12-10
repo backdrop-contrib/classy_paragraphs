@@ -10,9 +10,9 @@
 function classy_paragraphs_test_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-cp_landing_page-body'
-  $field_instances['node-cp_landing_page-body'] = array(
-    'bundle' => 'cp_landing_page',
+  // Exported field_instance: 'node-cp_test_landing_page-body'
+  $field_instances['node-cp_test_landing_page-body'] = array(
+    'bundle' => 'cp_test_landing_page',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -54,9 +54,9 @@ function classy_paragraphs_test_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-cp_landing_page-field_cp_paragraphs'
-  $field_instances['node-cp_landing_page-field_cp_paragraphs'] = array(
-    'bundle' => 'cp_landing_page',
+  // Exported field_instance: 'node-cp_test_landing_page-field_cp_test_paragraphs'
+  $field_instances['node-cp_test_landing_page-field_cp_test_paragraphs'] = array(
+    'bundle' => 'cp_test_landing_page',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -77,15 +77,14 @@ function classy_paragraphs_test_field_default_field_instances() {
         'weight' => 0,
       ),
     ),
-    'ds_extras_field_template' => '',
     'entity_type' => 'node',
-    'field_name' => 'field_cp_paragraphs',
+    'field_name' => 'field_cp_test_paragraphs',
     'label' => 'Paragraphs',
     'required' => 0,
     'settings' => array(
       'add_mode' => 'select',
       'allowed_bundles' => array(
-        'cp_content' => 0,
+        'cp_test_content' => 0,
       ),
       'default_edit_mode' => 'open',
       'title' => 'Paragraph',
@@ -101,9 +100,9 @@ function classy_paragraphs_test_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'paragraphs_item-cp_content-field_cp_body'
-  $field_instances['paragraphs_item-cp_content-field_cp_body'] = array(
-    'bundle' => 'cp_content',
+  // Exported field_instance: 'paragraphs_item-cp_test_content-field_cp_test_body'
+  $field_instances['paragraphs_item-cp_test_content-field_cp_test_body'] = array(
+    'bundle' => 'cp_test_content',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -113,7 +112,7 @@ function classy_paragraphs_test_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 1,
+        'weight' => 0,
       ),
       'paragraphs_editor_preview' => array(
         'label' => 'above',
@@ -122,11 +121,10 @@ function classy_paragraphs_test_field_default_field_instances() {
         'weight' => 0,
       ),
     ),
-    'ds_extras_field_template' => '',
     'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_cp_body',
-    'label' => 'Body',
-    'required' => 1,
+    'field_name' => 'field_cp_test_body',
+    'label' => 'Body (test)',
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -138,14 +136,18 @@ function classy_paragraphs_test_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 1,
     ),
   );
 
-  // Exported field_instance: 'paragraphs_item-cp_content-field_cp_class'
-  $field_instances['paragraphs_item-cp_content-field_cp_class'] = array(
-    'bundle' => 'cp_content',
-    'default_value' => NULL,
+  // Exported field_instance: 'paragraphs_item-cp_test_content-field_cp_test_class'
+  $field_instances['paragraphs_item-cp_test_content-field_cp_test_class'] = array(
+    'bundle' => 'cp_test_content',
+    'default_value' => array(
+      0 => array(
+        'value' => 'loud',
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -154,7 +156,7 @@ function classy_paragraphs_test_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 0,
+        'weight' => 1,
       ),
       'paragraphs_editor_preview' => array(
         'label' => 'above',
@@ -164,24 +166,26 @@ function classy_paragraphs_test_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_cp_class',
-    'label' => 'Class',
-    'required' => FALSE,
+    'field_name' => 'field_cp_test_class',
+    'label' => 'Class (test)',
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 0,
       'module' => 'classy_paragraphs',
       'settings' => array(),
       'type' => 'classy_paragraphs_select',
-      'weight' => 1,
+      'weight' => 0,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
-  t('Class');
+  t('Body (test)');
+  t('Class (test)');
   t('Paragraphs');
 
   return $field_instances;

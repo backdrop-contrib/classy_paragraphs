@@ -1,11 +1,38 @@
 <?php
 
 /**
+ * Class ClassyParagraphsTestBase
+ *
+ * Base test class used for all functional test.
+ */
+class ClassyParagraphsTestBase extends DrupalWebTestCase {
+
+  /**
+   * Helper method used to create node with paragraphs.
+   *
+   * @param string $css_class
+   * @param string $node_type
+   * @return array
+   */
+  public function createNodeWithParagraph($css_class = 'test-soft-value', $node_type = 'cp_test_landing_page') {
+    $node = $this->drupalCreateNode(array('type' => $node_type));
+
+    $entity = entity_create('paragraphs_item', array('bundle' => 'cp_test_content', 'field_name' => 'field_cp_test_paragraphs'));
+    $entity->field_cp_test_class[LANGUAGE_NONE][0]['value'] = $css_class;
+    $entity->field_cp_test_body[LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $entity->setHostEntity('node', $node);
+    $entity->save();
+
+    return array($node, $entity);
+  }
+}
+
+/**
  * Class ClassyParagraphsTestTestFeatureCase
  *
  * Ensure that the test features has been installed.
  */
-class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
+class ClassyParagraphsTestTestFeatureCase extends ClassyParagraphsTestBase {
 
   public static function getInfo() {
     return array(
@@ -27,9 +54,9 @@ class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
    */
   public function testClassyParagraphsNodeType() {
     $node_types = node_type_get_types();
-    $this->assertTrue(isset($node_types['cp_landing_page']), 'Node type landing page is available.');
+    $this->assertTrue(isset($node_types['cp_test_landing_page']), 'Node type landing page is available.');
     // Go to test content type.
-    $this->drupalGet('node/add/cp-landing-page');
+    $this->drupalGet('node/add/cp-test-landing-page');
     $this->assertRaw('Paragraphs', 'Found paragraphs field');
   }
 
@@ -39,12 +66,12 @@ class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
   public function testClassyParagraphsCheckParagraph() {
     // Get to paragraphs admin page.
     $this->drupalGet('admin/structure/paragraphs');
-    $this->assertText('Content (cp_content)', 'Found test paragraph');
+    $this->assertText('Content (test) (cp_test_content)', 'Found test paragraph');
     // Ensure fields are present.
-    $this->drupalGet('admin/structure/paragraphs/cp-content/fields');
+    $this->drupalGet('admin/structure/paragraphs/cp-test-content/fields');
     $this->assertText('Classy paragraphs select', 'Found classy paragraphs widget.');
-    $this->assertText('field_cp_class', 'Found class field.');
-    $this->assertText('field_cp_body', 'Found body field.');
+    $this->assertText('field_cp_test_class', 'Found class field.');
+    $this->assertText('field_cp_test_body', 'Found body field.');
   }
 }
 
@@ -53,7 +80,7 @@ class ClassyParagraphsTestTestFeatureCase extends DrupalWebTestCase {
  *
  * Ensure that the markup appears.
  */
-class ClassyParagraphsTestClassCase extends DrupalWebTestCase {
+class ClassyParagraphsTestClassCase extends ClassyParagraphsTestBase {
 
   public static function getInfo() {
     return array(
@@ -68,25 +95,13 @@ class ClassyParagraphsTestClassCase extends DrupalWebTestCase {
   }
 
   /**
-   *
+   * Check markup class.
    */
   public function testClassyParagraphsCheckMarkup() {
     $css_class = 'test-soft-value';
-    $node = $this->drupalCreateNode(array('type' => 'cp_landing_page'));
-
-    $entity = entity_create('paragraphs_item', array('bundle' => 'cp_content', 'field_name' => 'field_cp_paragraphs'));
-    $entity->field_cp_class[LANGUAGE_NONE][0]['value'] = $css_class;
-    $entity->field_cp_body[LANGUAGE_NONE][0]['value'] = $this->randomString();
-    $entity->setHostEntity('node', $node);
-    $entity->save();
-
+    list ($node, $entity) = $this->createNodeWithParagraph($css_class);
     $this->drupalGet('node/' . $node->nid);
-
     $class = $this->xpath('//*[contains(@class, "' . $css_class . '")]');
     $this->assertTrue(count($class) == 1, $css_class . ' class found.');
-
-    $web_user = $this->drupalCreateUser(array('bypass node access', 'administer content types', 'administer paragraphs bundles'));
-    $this->drupalLogin($web_user);
-    $this->drupalGet('node/' . $node->nid . '/edit');
   }
 }

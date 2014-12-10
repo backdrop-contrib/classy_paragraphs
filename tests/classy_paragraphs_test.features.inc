@@ -9,10 +9,10 @@
  */
 function classy_paragraphs_test_node_info() {
   $items = array(
-    'cp_landing_page' => array(
+    'cp_test_landing_page' => array(
       'name' => t('Landing page'),
       'base' => 'node_content',
-      'description' => t('Content type used for testing.'),
+      'description' => '',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
@@ -27,9 +27,9 @@ function classy_paragraphs_test_node_info() {
  */
 function classy_paragraphs_test_paragraphs_info() {
   $items = array(
-    'cp_content' => array(
-      'name' => 'Content',
-      'bundle' => 'cp_content',
+    'cp_test_content' => array(
+      'name' => 'Content (test)',
+      'bundle' => 'cp_test_content',
       'locked' => '1',
     ),
   );

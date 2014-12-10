@@ -1,7 +1,10 @@
 <?php
 
+// Paragraphs entity bundle.
 define('CLASSY_PARAGRAPHS_ENTITY_TYPE', 'paragraphs_item');
+// Full content view mode machine name.
 define('CLASSY_PARAGRAPHS_VIEW_MODE', 'full');
+// Custom classy_paragraphs widget.
 define('CLASSY_PARAGRAPHS_WIDGET', 'classy_paragraphs_select');
 
 /**
@@ -72,7 +75,6 @@ function classy_paragraphs_get_options($field, $instance) {
   $options = module_invoke_all('classy_paragraphs_list_options', $options, $field, $instance);
   drupal_alter('classy_paragraphs_list_options', $options);
 
-
   return $options;
 }
 
@@ -80,7 +82,6 @@ function classy_paragraphs_get_options($field, $instance) {
  * Implements template_preprocess_entity()
  */
 function classy_paragraphs_preprocess_entity(&$variables) {
-
   if ($variables['entity_type'] == CLASSY_PARAGRAPHS_ENTITY_TYPE && $variables['view_mode'] == CLASSY_PARAGRAPHS_VIEW_MODE) {
     $class = classy_paragraphs_get_class($variables['paragraphs_item']);
     if (!empty($class)) {
