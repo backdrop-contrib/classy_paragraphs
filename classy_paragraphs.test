@@ -1,0 +1,21 @@
+<?php
+
+class ClassyParagraphsTestCase extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Classy Paragraphs',
+      'description' => 'Ensure that the Classy Paragraphs widget install.',
+      'group' => 'Classy Paragraphs',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('classy_paragraphs');
+  }
+
+
+  public function testParagraphsPackContentBundle() {
+    $this->assertTrue(TRUE, t('Yes its true'));
+  }
+}

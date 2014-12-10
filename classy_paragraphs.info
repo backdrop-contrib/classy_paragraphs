@@ -3,3 +3,5 @@ description = Allows an editor to apply a class to paragraphs.
 package = Panels
 dependencies[] = paragraphs
 core = 7.x
+
+files[] = classy_paragraphs.test
