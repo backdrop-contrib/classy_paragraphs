@@ -43,16 +43,6 @@ function classy_paragraphs_preprocess_entity(&$variables) {
 }
 
 /**
- * Implements hook_classy_paragraph_list_options().
- */
-function classy_paragraphs_classy_paragraphs_list_options($options, $field, $instance) {
-  $options['loud'] = t('Loud');
-  $options['soft'] = t('Soft');
-
-  return $options;
-}
-
-/**
  * Get class name from paragraph item.
  *
  * @param ParagraphsItemEntity $item
