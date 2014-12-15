@@ -1,8 +1,8 @@
-Classy paragraphs ships a widget which allows an editor to apply a class to paragraphs via a List (text) field.
+Classy paragraphs ships a new field type "Class list" which allows an editor to apply a selected class to paragraphs.
 
 ## How to use
 
-Create a List (text) field and use the "Classy paragraphs select" widget. Classes are added by implementing the `hook_classy_paragraph_list_options`.
+Create a "Class list" field on your paragraph's bundle. Classes are added by implementing the `hook_classy_paragraph_list_options`.
 
 ## How this module works
 

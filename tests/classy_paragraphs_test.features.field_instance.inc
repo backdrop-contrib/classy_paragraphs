@@ -173,10 +173,10 @@ function classy_paragraphs_test_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'classy_paragraphs',
+      'active' => 1,
+      'module' => 'options',
       'settings' => array(),
-      'type' => 'classy_paragraphs_select',
+      'type' => 'options_select',
       'weight' => 0,
     ),
   );

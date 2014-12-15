@@ -4,64 +4,13 @@
 define('CLASSY_PARAGRAPHS_ENTITY_TYPE', 'paragraphs_item');
 // Full content view mode machine name.
 define('CLASSY_PARAGRAPHS_VIEW_MODE', 'full');
-// Custom classy_paragraphs widget.
-define('CLASSY_PARAGRAPHS_WIDGET', 'classy_paragraphs_select');
+// Field type classy paragraphs list.
+define('CLASSY_PARAGRAPHS_FIELD_TYPE_LIST', 'cp_list');
 
-/**
- * Implements hook_field_widget_info().
- */
-function classy_paragraphs_field_widget_info() {
-  return array(
-    CLASSY_PARAGRAPHS_WIDGET => array(
-      'label' => t('Classy paragraphs select'),
-      'field types' => array('list_text'),
-      'behaviors' => array(
-        'multiple values' => FIELD_BEHAVIOR_CUSTOM,
-      ),
-    ),
-  );
-}
-
-/**
- * Implementation of hook_field_widget_form().
- */
-function classy_paragraphs_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  // Abstract over the actual field columns, to allow different field types to
-  // reuse those widgets.
-  $value_key = key($field['columns']);
-
-  $multiple = $field['cardinality'] > 1 || $field['cardinality'] == FIELD_CARDINALITY_UNLIMITED;
-  $required = $element['#required'];
-  $has_value = isset($items[0][$value_key]);
-  $properties = _options_properties('select', $multiple, $required, $has_value);
-
-  $entity_type = $element['#entity_type'];
-  $entity = $element['#entity'];
-
-  // Prepare the list of options.
-  $options = classy_paragraphs_get_options($field, $instance);
-  // Put current field values in shape.
-  $default_value = _options_storage_to_form($items, $options, $value_key, $properties);
-
-  switch ($instance['widget']['type']) {
-    case CLASSY_PARAGRAPHS_WIDGET:
-      $element += array(
-        '#type' => 'select',
-        '#default_value' => $default_value,
-        // Do not display a 'multiple' select box if there is only one option.
-        '#multiple' => $multiple && count($options) > 1,
-        '#options' => $options,
-      );
-      break;
-  }
-
-  $element += array(
-    '#value_key' => $value_key,
-    '#element_validate' => array('options_field_widget_validate'),
-    '#properties' => $properties,
-  );
-  return $element;
-}
+// Includes fields.
+require_once dirname(__FILE__) . '/includes/classy_paragraphs.fields.inc';
+// Includes fields CRUD functions
+require_once dirname(__FILE__) . '/includes/classy_paragraphs.fields_crud.inc';
 
 /**
  * Get list of options from other modules.
@@ -112,9 +61,9 @@ function classy_paragraphs_get_class(ParagraphsItemEntity $item) {
 
   foreach ($instances as $instance) {
     $field_name = $instance['field_name'];
-    if ($instance['widget']['type'] == CLASSY_PARAGRAPHS_WIDGET) {
-      $field = field_info_field($field_name);
+    $field = field_info_field($field_name);
 
+    if ($field['type'] == CLASSY_PARAGRAPHS_FIELD_TYPE_LIST) {
       // Determine the list of languages to iterate on.
       $languages = field_available_languages(CLASSY_PARAGRAPHS_ENTITY_TYPE, $field);
 

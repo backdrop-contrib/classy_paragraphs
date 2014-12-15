@@ -25,6 +25,7 @@ class ClassyParagraphsTestBase extends DrupalWebTestCase {
 
     return array($node, $entity);
   }
+
 }
 
 /**
@@ -37,7 +38,7 @@ class ClassyParagraphsTestTestFeatureCase extends ClassyParagraphsTestBase {
   public static function getInfo() {
     return array(
       'name' => 'Test Classy paragraphs feature module',
-      'description' => 'Ensure that the Classy paragraphs feature installs',
+      'description' => 'Ensure that the Classy paragraphs feature installs.',
       'group' => 'Classy Paragraphs',
     );
   }
@@ -69,10 +70,10 @@ class ClassyParagraphsTestTestFeatureCase extends ClassyParagraphsTestBase {
     $this->assertText('Content (test) (cp_test_content)', 'Found test paragraph');
     // Ensure fields are present.
     $this->drupalGet('admin/structure/paragraphs/cp-test-content/fields');
-    $this->assertText('Classy paragraphs select', 'Found classy paragraphs widget.');
     $this->assertText('field_cp_test_class', 'Found class field.');
     $this->assertText('field_cp_test_body', 'Found body field.');
   }
+
 }
 
 /**
@@ -104,4 +105,5 @@ class ClassyParagraphsTestClassCase extends ClassyParagraphsTestBase {
     $class = $this->xpath('//*[contains(@class, "' . $css_class . '")]');
     $this->assertTrue(count($class) == 1, $css_class . ' class found.');
   }
+
 }

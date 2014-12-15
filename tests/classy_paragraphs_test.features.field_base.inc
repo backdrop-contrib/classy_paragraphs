@@ -80,13 +80,10 @@ function classy_paragraphs_test_field_default_field_bases() {
       ),
     ),
     'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(),
-      'allowed_values_function' => '',
-    ),
+    'module' => 'classy_paragraphs',
+    'settings' => array(),
     'translatable' => 0,
-    'type' => 'list_text',
+    'type' => 'cp_list',
   );
 
   // Exported field_base: 'field_cp_test_paragraphs'
