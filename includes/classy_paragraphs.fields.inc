@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Implements custom fields: CLASSY_PARAGRAPHS_FIELD_TYPE_LIST.
+ * Implements custom field: cp_list (CLASSY_PARAGRAPHS_FIELD_TYPE_LIST).
  *
  */
 
@@ -17,7 +17,7 @@ function classy_paragraphs_field_info() {
       'default_widget' => 'options_select',
       'default_formatter' => 'list_default',
       // Setting below are necessary for "options_select" widget and
-      // "list_default" formatter to wrok correctly without warnings.
+      // "list_default" formatter to work correctly without warnings.
       'settings' => array('allowed_values' => array(), 'allowed_values_function' => ''),
     ),
   );
@@ -59,7 +59,7 @@ function classy_paragraphs_field_validate($entity_type, $entity, $field, $instan
  * Implements hook_field_widget_info_alter().
  *
  * The CLASSY_PARAGRAPHS_FIELD_TYPE_LIST field type does not implement widgets of its own, but reuses the
- * widgets defined in options.module.
+ * widget defined in options.module.
  *
  * @see paragraphs_pack_options_list()
  */
