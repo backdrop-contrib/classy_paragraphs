@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Contains tests for Classy Paragraphs.
+ */
+
+/**
  * Class ClassyParagraphsTestBase
  *
  * Base test class used for all functional test.

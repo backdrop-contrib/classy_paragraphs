@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Main module file for Classy Paragraphs.
+ */
+
 // Paragraphs entity bundle.
 define('CLASSY_PARAGRAPHS_ENTITY_TYPE', 'paragraphs_item');
 // Full content view mode machine name.
@@ -7,7 +12,7 @@ define('CLASSY_PARAGRAPHS_VIEW_MODE', 'full');
 // Field type classy paragraphs list.
 define('CLASSY_PARAGRAPHS_FIELD_TYPE_LIST', 'cp_list');
 
-// Includes fields.
+// Include fields.
 require_once dirname(__FILE__) . '/includes/classy_paragraphs.fields.inc';
 
 /**
