@@ -107,3 +107,59 @@ class ClassyParagraphsTestClassCase extends ClassyParagraphsTestBase {
   }
 
 }
+
+/**
+ * Class ClassyParagraphsTestFieldClass
+ *
+ * Ensure that the class field and its instance can be created successfully.
+ */
+class ClassyParagraphsTestFieldClass extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Test class field',
+      'description' => 'Ensure that the class field and its instance can be created successfully.',
+      'group' => 'Classy Paragraphs',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('classy_paragraphs_test');
+  }
+
+  /**
+   * Check markup class.
+   */
+  public function testClassyParagraphsFieldClass() {
+    $field_name = 'cp_test_field';
+    $field_label = 'Test field';
+    $entity_type = 'paragraphs_item';
+    $bundle = 'cp_test_content';
+
+    // Test creation of class field.
+    $field = array(
+      'field_name' => $field_name,
+      'type' => CLASSY_PARAGRAPHS_FIELD_TYPE_LIST,
+      'entity_types' => array(CLASSY_PARAGRAPHS_ENTITY_TYPE),
+    );
+    field_create_field($field);
+
+    $field_info = field_info_field($field['field_name']);
+    $field_info_exists = !empty($field_info);
+    $this->assertTrue($field_info_exists, t('Field was created successfully.'));
+
+    // Test creation of class field instance.
+    $instance = array(
+      'field_name' => $field['field_name'],
+      'entity_type' => $entity_type,
+      'bundle' => $bundle,
+      'label' => $field_label,
+    );
+    field_create_instance($instance);
+
+    $instance_info = field_info_instance($entity_type, $field['field_name'], $bundle);
+    $instance_exists = !empty($instance_info);
+    $this->assertTrue($instance_exists, t('Instance was created successfully.'));
+  }
+
+}

@@ -9,8 +9,6 @@ define('CLASSY_PARAGRAPHS_FIELD_TYPE_LIST', 'cp_list');
 
 // Includes fields.
 require_once dirname(__FILE__) . '/includes/classy_paragraphs.fields.inc';
-// Includes fields CRUD functions
-require_once dirname(__FILE__) . '/includes/classy_paragraphs.fields_crud.inc';
 
 /**
  * Get list of options from other modules.
