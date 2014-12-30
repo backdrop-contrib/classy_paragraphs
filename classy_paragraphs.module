@@ -73,3 +73,11 @@ function classy_paragraphs_get_class(ParagraphsItemEntity $item) {
 
   return $class;
 }
+
+/**
+ * Implements template_preprocess_edgy_paragraphs_item().
+ */
+function classy_paragraphs_preprocess_edgy_paragraphs_item(&$variables) {
+  // Integrates Classy paragraphs with Edgy.
+  classy_paragraphs_preprocess_entity($variables);
+}
