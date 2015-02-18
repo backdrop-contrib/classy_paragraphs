@@ -32,6 +32,11 @@ function classy_paragraphs_test_paragraphs_info() {
       'bundle' => 'cp_test_content',
       'locked' => '1',
     ),
+    'cp_test_content_multiple_classes' => array(
+      'name' => 'Content multiple classes (test)',
+      'bundle' => 'cp_test_content_multiple_classes',
+      'locked' => '1',
+    ),
   );
   return $items;
 }

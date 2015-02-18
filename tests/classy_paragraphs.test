@@ -15,15 +15,32 @@ class ClassyParagraphsTestBase extends DrupalWebTestCase {
   /**
    * Helper method used to create node with paragraphs.
    *
-   * @param string $css_class
+   * @param array $css_classes
+   *   Classes that should be added to the class field.
    * @param string $node_type
+   *   A type of a node that should be created.
    * @return array
+   *   An array containing newly created node and entity, in this order.
    */
-  public function createNodeWithParagraph($css_class = 'test-soft-value', $node_type = 'cp_test_landing_page') {
+  public function createNodeWithParagraph($css_classes, $node_type = 'cp_test_landing_page') {
+    // Make an array if necessary.
+    if (!is_array($css_classes)) {
+      $css_classes = array($css_classes);
+    }
+
+    // Decide whether paragraph item with one class or multiple classes should be created.
+    $field_name = (count($css_classes) == 1) ? 'field_cp_test_class' : 'field_cp_multiple_classes';
+    $bundle = (count($css_classes) == 1) ? 'cp_test_content' : 'cp_test_content_multiple_classes';
+
     $node = $this->drupalCreateNode(array('type' => $node_type));
 
-    $entity = entity_create('paragraphs_item', array('bundle' => 'cp_test_content', 'field_name' => 'field_cp_test_paragraphs'));
-    $entity->field_cp_test_class[LANGUAGE_NONE][0]['value'] = $css_class;
+    $entity = entity_create('paragraphs_item', array('bundle' => $bundle, 'field_name' => 'field_cp_test_paragraphs'));
+    // Add all css classes.
+    $index = 0;
+    foreach ($css_classes as $css_class) {
+      $entity->{$field_name}[LANGUAGE_NONE][$index]['value'] = $css_class;
+      ++$index;
+    }
     $entity->field_cp_test_body[LANGUAGE_NONE][0]['value'] = $this->randomString();
     $entity->setHostEntity('node', $node);
     $entity->save();
@@ -90,8 +107,8 @@ class ClassyParagraphsTestClassCase extends ClassyParagraphsTestBase {
 
   public static function getInfo() {
     return array(
-      'name' => 'Test class mark',
-      'description' => 'Ensure that the class appears in markup.',
+      'name' => 'Test class mark and multiple classes mark',
+      'description' => 'Ensure that the class or multiple classes appear in markup.',
       'group' => 'Classy Paragraphs',
     );
   }
@@ -109,6 +126,19 @@ class ClassyParagraphsTestClassCase extends ClassyParagraphsTestBase {
     $this->drupalGet('node/' . $node->nid);
     $class = $this->xpath('//*[contains(@class, "' . $css_class . '")]');
     $this->assertTrue(count($class) == 1, $css_class . ' class found.');
+  }
+
+  /**
+   * Check markup of multiple class.
+   */
+  public function testClassyParagraphsCheckMarkupOfMultipleClasses() {
+    $css_classes = array('test-soft-value', 'test-hard-value');
+    list ($node, $entity) = $this->createNodeWithParagraph($css_classes);
+    $this->drupalGet('node/' . $node->nid);
+    foreach ($css_classes as $css_class) {
+      $class = $this->xpath('//*[contains(@class, "' . $css_class . '")]');
+      $this->assertTrue(count($class) == 1, $css_class . ' class found.');
+    }
   }
 
 }

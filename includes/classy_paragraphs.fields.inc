@@ -66,6 +66,7 @@ function classy_paragraphs_field_validate($entity_type, $entity, $field, $instan
 function classy_paragraphs_field_widget_info_alter(&$info) {
   $widgets = array(
     'options_select' => array(CLASSY_PARAGRAPHS_FIELD_TYPE_LIST),
+    'options_buttons' => array(CLASSY_PARAGRAPHS_FIELD_TYPE_LIST),
   );
 
   foreach ($widgets as $widget => $field_types) {

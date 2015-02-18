@@ -35,21 +35,21 @@ function classy_paragraphs_get_options($field, $instance) {
  */
 function classy_paragraphs_preprocess_entity(&$variables) {
   if ($variables['entity_type'] == CLASSY_PARAGRAPHS_ENTITY_TYPE && $variables['view_mode'] == CLASSY_PARAGRAPHS_VIEW_MODE) {
-    $class = classy_paragraphs_get_class($variables['paragraphs_item']);
-    if (!empty($class)) {
+    $classes = classy_paragraphs_get_classes($variables['paragraphs_item']);
+    foreach ($classes as $class) {
       $variables['classes_array'][] = drupal_html_class($class);
     }
   }
 }
 
 /**
- * Get class name from paragraph item.
+ * Get class names from paragraph item.
  *
  * @param ParagraphsItemEntity $item
  * @return string
  */
-function classy_paragraphs_get_class(ParagraphsItemEntity $item) {
-  $class = '';
+function classy_paragraphs_get_classes(ParagraphsItemEntity $item) {
+  $classes = array();
   $instances = field_info_instances(CLASSY_PARAGRAPHS_ENTITY_TYPE, $item->bundle);
 
   foreach ($instances as $instance) {
@@ -63,15 +63,14 @@ function classy_paragraphs_get_class(ParagraphsItemEntity $item) {
       foreach ($languages as $langcode) {
         if (!empty($item->{$field_name}[$langcode])) {
           foreach ($item->{$field_name}[$langcode] as $field_item) {
-            $class = $field_item['value'];
-            break;
+            $classes[] = $field_item['value'];
           }
         }
       }
     }
   }
 
-  return $class;
+  return $classes;
 }
 
 /**

@@ -39,6 +39,29 @@ function classy_paragraphs_test_field_default_field_bases() {
     'type' => 'text_with_summary',
   );
 
+  // Exported field_base: 'field_cp_multiple_classes'
+  $field_bases['field_cp_multiple_classes'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_cp_multiple_classes',
+    'foreign keys' => array(),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'classy_paragraphs',
+    'settings' => array(
+      'allowed_values' => array(),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'cp_list',
+  );
+
   // Exported field_base: 'field_cp_test_body'
   $field_bases['field_cp_test_body'] = array(
     'active' => 1,
@@ -81,7 +104,10 @@ function classy_paragraphs_test_field_default_field_bases() {
     ),
     'locked' => 0,
     'module' => 'classy_paragraphs',
-    'settings' => array(),
+    'settings' => array(
+      'allowed_values' => array(),
+      'allowed_values_function' => '',
+    ),
     'translatable' => 0,
     'type' => 'cp_list',
   );
