@@ -1,6 +1,7 @@
 name = Classy paragraphs test
 core = 7.x
 package = Features
+hidden = TRUE
 dependencies[] = classy_paragraphs
 dependencies[] = features
 dependencies[] = list
