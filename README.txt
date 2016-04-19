@@ -1,12 +1,12 @@
 # Overview
 
-Classy paragraphs ships a new field type "Class list" which allows an editor to apply a selected class to paragraphs via a drop-down list. Site builders can add this functionality by creating a custom "Class list" field. Currently, classes can only be  added by implementing the `hook_classy_paragraph_list_options` hook.
+Classy paragraphs ships a new field type "Class list" which allows an editor to apply a selected class to paragraphs via a drop-down list. Site builders can add this functionality by creating a custom "Class list" field. Currently, classes can only be  added by implementing the `hook_classy_paragraphs_list_options` hook.
 
 # Installation
 
 - Enable Classy paragraphs
 - Add "Class list" field to desired paragraph type
-- Defines classes by implementing the the `hook_classy_paragraph_list_options` hook.
+- Defines classes by implementing the the `hook_classy_paragraphs_list_options` hook.
 
 ## How It Works
 
