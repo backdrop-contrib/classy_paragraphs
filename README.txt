@@ -14,6 +14,14 @@ This module allows an editor to select a class, via a drop-down list, which is a
 
 The class is added to the template via the `classy_paragraphs_preprocess_entity` preprocess function. In this function we use `classy_paragraphs_get_class` to pull out the selected class from the paragraph_item entity. Once we have a class, then we add it to the template using `$variables['classes_array']`.
 
+## UI for Managing Classes
+
+If you don't want to use a hook to implement classes then look at using the classy_paragraphs_ui module on GitHub (https://github.com/dervishmoose/classy_paragraphs_ui).
+
+Credit goes to Mark Breneman (https://www.drupal.org/u/dervishmoose) for this useful module.
+
+If you want to see this merged into classy_paragraphs then help out in issue: https://www.drupal.org/node/2447809.
+
 # Requirements
 
 - Paragraphs
