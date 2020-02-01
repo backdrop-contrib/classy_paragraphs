@@ -46,7 +46,8 @@ function classy_paragraphs_preprocess_entity(&$variables) {
  * Get class names from paragraph item.
  *
  * @param ParagraphsItemEntity $item
- * @return string
+ *
+ * @return string[]
  */
 function classy_paragraphs_get_classes(ParagraphsItemEntity $item) {
   $classes = array();
