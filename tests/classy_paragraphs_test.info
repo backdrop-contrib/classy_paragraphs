@@ -1,5 +1,6 @@
 name = Classy paragraphs test
-core = 7.x
+backdrop = 1.x
+type = module
 package = Features
 hidden = TRUE
 dependencies[] = classy_paragraphs

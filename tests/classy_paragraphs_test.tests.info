@@ -1,0 +1,24 @@
+[ClassyParagraphsTestBase]
+name = ClassyParagraphsTestBase
+description = ClassyParagraphsTestBase
+group = classy_paragraphs_test
+file = classy_paragraphs.test
+
+[ClassyParagraphsTestTestFeatureCase]
+name = Test Classy paragraphs feature module
+description = Ensure that the Classy paragraphs feature installs.
+group = Classy Paragraphs
+file = classy_paragraphs.test
+
+[ClassyParagraphsTestClassCase]
+name = Test class mark and multiple classes mark
+description = Ensure that the class or multiple classes appear in markup.
+group = Classy Paragraphs
+file = classy_paragraphs.test
+
+[ClassyParagraphsTestFieldClass]
+name = Test class field
+description = Ensure that the class field and its instance can be created successfully.
+group = Classy Paragraphs
+file = classy_paragraphs.test
+

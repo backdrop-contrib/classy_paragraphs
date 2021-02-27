@@ -18,7 +18,10 @@ function classy_paragraphs_field_info() {
       'default_formatter' => 'list_default',
       // Setting below are necessary for "options_select" widget and
       // "list_default" formatter to work correctly without warnings.
-      'settings' => array('allowed_values' => array(), 'allowed_values_function' => ''),
+      'settings' => array(
+        'allowed_values' => array(),
+        'allowed_values_function' => '',
+      ),
     ),
   );
 }

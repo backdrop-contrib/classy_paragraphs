@@ -18,7 +18,7 @@ function classy_paragraphs_test_node_info() {
       'help' => '',
     ),
   );
-  drupal_alter('node_info', $items);
+  backdrop_alter('node_info', $items);
   return $items;
 }
 
