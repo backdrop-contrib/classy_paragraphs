@@ -1,29 +1,46 @@
-INTRODUCTION
-------------
+# Classy Paragraphs
 
-Classy paragraphs ships a new field type "Class list" which allows an editor to apply a selected class to paragraphs via a drop-down list. Site builders can add this functionality by creating a custom "Class list" field. Currently, classes can only be  added by implementing the hook_classy_paragraphs_list_options hook.
+Classy paragraphs ships a new field type "Class list" which allows an editor to
+apply a selected class to paragraph items via a drop-down list. Site builders
+can add this functionality by creating a custom "Class list" field. Classes can
+be added by implementing the `hook_classy_paragraphs_list_options` hook, or
+through the UI with the included *Classy Paragraphs UI* sub-module.
 
-REQUIREMENTS
-------------
- This module requires the following modules:
- * Paragraphs (https://www.drupal.org/project/paragraphs)
+## Dependencies
+
+- Paragraphs
+- List
+- Options
  
-INSTALLATION
-------------
+## Installation and Usage
 
- * Enable Classy paragraphs
- * Add "Class list" field to desired paragraph type
- * Defines classes by implementing the the hook_classy_paragraphs_list_options hook.
+- Install this module using the [official Backdrop CMS instructions](https://backdropcms.org/guide/modules).
+- Add "Class list" field to desired paragraph type
+- Define classes by:
+    - implementing the the `hook_classy_paragraphs_list_options` hook, OR
+    - Activating the *Classy Paragraphs UI* sub-module and adding classes at 
+      **Configuration > Content authoring > Classy Paragraphs UI**
+- Further instructions can be found in (and added to) the [Wiki](https://github.com/backdrop-contrib/classy_paragraphs/wiki)
 
-CONFIGURATION
-----------------------------------------------------
+## Issues
 
-This module allows an editor to select a class, via a drop-down list, which is added to the paragraph template.
+Bugs and Feature requests should be reported in the [Issue Queue](https://github.com/backdrop-contrib/classy_paragraphs/issues)
 
-The class is added to the template via the classy_paragraphs_preprocess_entity preprocess function. In this function we use classy_paragraphs_get_class to pull out the selected class from the paragraph_item entity. Once we have a class, then we add it to the template using $variables['classes_array'].
+## Current Maintainers
 
-If you don't want to use a hook to implement classes then look at using the classy_paragraphs_ui module on GitHub (https://github.com/dervishmoose/classy_paragraphs_ui).
+- [Laryn Kragt Bakker](https://github.com/laryn/), [CEDC.org](https://CEDC.org) 
 
-Credit goes to Mark Breneman (https://www.drupal.org/u/dervishmoose) for this useful module.
+## Credits
 
-If you want to see this merged into classy_paragraphs then help out in issue: https://www.drupal.org/node/2447809.
+- Ported to Backdrop CMS by [Laryn Kragt Bakker](https://github.com/laryn/), [CEDC.org](https://CEDC.org)
+- The Drupal 7 version is maintained by [Ivan Trokhanenko](https://www.drupal.org/u/i-trokhanenko)
+  and [Ivan Zugec](https://www.drupal.org/u/ivan-zugec), and has been supported
+  by [Morpht](https://www.drupal.org/morpht) and
+  [RockSolid PSF](https://www.drupal.org/rocksolid-psf).
+- The *Classy Paragraphs UI* sub-module was initially developed by
+  [Mark Breneman](https://www.drupal.org/u/dervishmoose).
+
+## License
+
+This project is GPL v2 software. See the LICENSE.txt file in this directory for
+complete text.

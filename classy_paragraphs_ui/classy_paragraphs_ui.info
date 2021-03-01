@@ -1,0 +1,9 @@
+name = Classy Paragraphs UI
+description = Provides a simple UI for Classy Paragraphs
+backdrop = 1.x
+type = module
+package = Paragraphs
+
+dependencies[] = classy_paragraphs
+
+configure = admin/config/content/classy-paragraphs-ui

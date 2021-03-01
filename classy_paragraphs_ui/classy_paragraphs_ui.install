@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * classy_paragraphs_ui.install
+ */
+
+/**
+ * Move Classy Paragraph UI settings from variables to config.
+ */
+function classy_paragraphs_ui_update_1000() {
+  // Migrate variables to config.
+  $config = config('classy_paragraphs_ui.settings');
+  $config->set('classy_paragraphs_settings', update_variable_get('classy_paragraphs_settings', ''));
+  $config->save();
+
+  // Delete variables.
+  update_variable_del('classy_paragraphs_settings');
+}

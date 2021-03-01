@@ -31,13 +31,15 @@ function classy_paragraphs_get_options($field, $instance) {
 }
 
 /**
- * Implements template_preprocess_entity()
+ * Implements template_preprocess_paragraphs_item()
  */
-function classy_paragraphs_preprocess_entity(&$variables) {
-  if ($variables['entity_type'] == CLASSY_PARAGRAPHS_ENTITY_TYPE) {
-    $classes = classy_paragraphs_get_classes($variables['paragraphs_item']);
+function classy_paragraphs_preprocess_paragraphs_item(&$variables, $hook) {
+  if ($hook == CLASSY_PARAGRAPHS_ENTITY_TYPE) {
+    $paragraphs_item_id = element_children($variables['elements']['entity']['paragraphs_item']);
+    $paragraphs_item_entity = paragraphs_item_load($paragraphs_item_id[0]);
+    $classes = classy_paragraphs_get_classes($paragraphs_item_entity);
     foreach ($classes as $class) {
-      $variables['classes_array'][] = backdrop_html_class($class);
+      $variables['classes'][] = backdrop_html_class($class);
     }
   }
 }
