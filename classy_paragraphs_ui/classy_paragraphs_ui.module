@@ -153,7 +153,7 @@ function classy_paragraphs_ui_delete_class($form, &$form_state, $the_id) {
 
   return confirm_form(
     $form,
-    t('Are you sure you want to delete this item?'),
+    t('Are you sure you want to delete this class?'),
     'admin/config/content/classy-paragraphs-ui',
     t('This action cannot be undone.'),
     t('Delete'),
@@ -226,15 +226,54 @@ function classy_paragraphs_ui_add_class_submit($form, &$form_state) {
   $config->save();
 }
 
+/**
+ * Delete set form.
+ */
+function classy_paragraphs_ui_delete_set($form, &$form_state, $the_id) {
+
+  $form = array();
+  $form['#action'] = '?destination=admin/config/content/classy-paragraphs-ui';
+  $form['the_id'] = array(
+    '#type' => 'value',
+    '#value' => $the_id,
+  );
+
+  return confirm_form(
+    $form,
+    t('Are you sure you want to delete this set?'),
+    'admin/config/content/classy-paragraphs-ui',
+    t('This action cannot be undone.'),
+    t('Delete'),
+    t('Cancel')
+  );
+
+  return $form;
+}
 
 /**
  * Submit handler for deleting a set.
  */
 function classy_paragraphs_ui_delete_set_submit($form, &$form_state) {
   $config = config('classy_paragraphs_ui.sets');
-  $the_id = $form_state['values']['the_id'];
+  $old_set_name = $form_state['values']['the_id'];
 
-  $config->clear($the_id);
+  $config->clear($old_set_name);
+  // Check if the set is used on any classes; if so we should delete the entry.
+  $classes_array = config_get('classy_paragraphs_ui.classes');
+  $classes_config = config('classy_paragraphs_ui.classes');
+  $class_change_needed = 0;
+  foreach ($classes_array as $class) {
+    foreach ($class['sets'] as $set) {
+      if ($set && strval($set) == $old_set_name) {
+        unset($class['sets'][$old_set_name]);
+        $classes_config->set($class['name'], $class);
+        $class_change_needed = 1;
+      }
+    }
+  }
+  if ($class_change_needed) {
+    $classes_config->save();
+  }
   $config->save();
 
   backdrop_set_message(t('The @set set has been deleted.', array('@set' => $form_state['values']['the_id'])));
