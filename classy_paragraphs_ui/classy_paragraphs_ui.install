@@ -17,3 +17,22 @@ function classy_paragraphs_ui_update_1000() {
   // Delete variables.
   update_variable_del('classy_paragraphs_settings');
 }
+
+/**
+ * Clean up config structure and extend to work with sets.
+ */
+function classy_paragraphs_ui_update_1100() {
+  $old_config = config('classy_paragraphs_ui.settings');
+  $config = config('classy_paragraphs_ui.classes');
+  foreach($old_config->get('classy_paragraphs_settings') as $oldclass) {
+    $class = array(
+      'name' => $oldclass['css_class_name'],
+      'label' => $oldclass['css_class_display'],
+      'sets' => array(),
+    );
+    $config->set($oldclass['css_class_name'], $class);
+  }
+  $config->save();
+  $old_config->clear('classy_paragraphs_settings');
+  $old_config->save();
+}

@@ -16,6 +16,9 @@ function classy_paragraphs_field_info() {
       'description' => t('This field stores a selected class.'),
       'default_widget' => 'options_select',
       'default_formatter' => 'list_default',
+      'instance_settings' => array(
+        'classy_paragraphs_set' => '',
+      ),
       // Setting below are necessary for "options_select" widget and
       // "list_default" formatter to work correctly without warnings.
       'settings' => array(
@@ -91,3 +94,34 @@ function classy_paragraphs_options_list($field, $instance, $entity_type, $entity
 
   return $options;
 }
+
+/**
+ * Implements hook_field_instance_settings_form().
+ */
+function classy_paragraphs_field_instance_settings_form($field, $instance) {
+  if (module_exists('classy_paragraphs_ui')) {
+    $settings = $instance['settings'];
+    $form = array();
+
+    // Allow this field to be limited to classes in a particular set.
+    $sets_array = config_get('classy_paragraphs_ui.sets');
+    if (!empty($sets_array)) {
+      $class_options = array();
+      foreach ($sets_array as $set) {
+        if ($set) {
+          $class_options[$set['name']] = $set['label'];
+        }
+      }
+      $form['classy_paragraphs_set'] =  array(
+        '#title'   => t('Limit to classes in a particular set'),
+        '#type'    => 'select',
+        '#options' => $class_options,
+        '#default_value' => isset($settings['classy_paragraphs_set']) ? $settings['classy_paragraphs_set'] : '',
+        '#empty' => t('- Show all -'),
+      );
+    }
+
+    return $form;
+  }
+}
+

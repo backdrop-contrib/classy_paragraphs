@@ -25,7 +25,7 @@ require_once dirname(__FILE__) . '/includes/classy_paragraphs.fields.inc';
 function classy_paragraphs_get_options($field, $instance) {
   $options = array();
   $options = module_invoke_all('classy_paragraphs_list_options', $options, $field, $instance);
-  backdrop_alter('classy_paragraphs_list_options', $options);
+  backdrop_alter('classy_paragraphs_list_options', $options, $field, $instance);
 
   return $options;
 }
