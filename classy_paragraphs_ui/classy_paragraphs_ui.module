@@ -80,8 +80,12 @@ function classy_paragraphs_ui_menu() {
   * Implements hook_config_info().
   */
 function classy_paragraphs_ui_config_info() {
-  $prefixes['classy_paragraphs_ui.settings'] = array(
-    'label' => t('Classy Paragraphs settings'),
+  $prefixes['classy_paragraphs_ui.classes'] = array(
+    'label' => t('Classy Paragraphs classes'),
+    'group' => t('Paragraphs'),
+  );
+  $prefixes['classy_paragraphs_ui.sets'] = array(
+    'label' => t('Classy Paragraphs sets'),
     'group' => t('Paragraphs'),
   );
   return $prefixes;
