@@ -19,7 +19,7 @@ function classy_paragraphs_field_schema($field) {
   $columns = array();
 
   switch ($field['type']) {
-    case CLASSY_PARAGRAPHS_FIELD_TYPE_LIST:
+    case 'cp_list':
       $columns = array(
         'value' => array(
           'type' => 'varchar',
