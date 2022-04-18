@@ -6,4 +6,4 @@ package = Paragraphs
 
 dependencies[] = list
 dependencies[] = options
-dependencies[] = paragraphs (>=1.2.0-alpha2)
+dependencies[] = paragraphs (>=1.2.0)
