@@ -11,14 +11,14 @@ through the UI with the included *Classy Paragraphs UI* sub-module.
 - Paragraphs
 - List
 - Options
- 
+
 ## Installation and Usage
 
 - Install this module using the [official Backdrop CMS instructions](https://backdropcms.org/guide/modules).
 - Add "Class list" field to desired paragraph type
 - Define classes by:
     - implementing the the `hook_classy_paragraphs_list_options` hook, OR
-    - Activating the *Classy Paragraphs UI* sub-module and adding classes at 
+    - Activating the *Classy Paragraphs UI* sub-module and adding classes at
       **Configuration > Content authoring > Classy Paragraphs UI**
 - Further instructions can be found in (and added to) the [Wiki](https://github.com/backdrop-contrib/classy_paragraphs/wiki)
 
@@ -28,11 +28,12 @@ Bugs and Feature requests should be reported in the [Issue Queue](https://github
 
 ## Current Maintainers
 
-- [Laryn Kragt Bakker](https://github.com/laryn/), [CEDC.org](https://CEDC.org) 
+- [Laryn Kragt Bakker](https://github.com/laryn/)
 
 ## Credits
 
-- Ported to Backdrop CMS by [Laryn Kragt Bakker](https://github.com/laryn/), [CEDC.org](https://CEDC.org)
+- Ported to Backdrop CMS by [Laryn Kragt Bakker](https://github.com/laryn/)
+- Initial Backdrop development supported by [CEDC.org](https://CEDC.org)
 - The Drupal 7 version is maintained by [Ivan Trokhanenko](https://www.drupal.org/u/i-trokhanenko)
   and [Ivan Zugec](https://www.drupal.org/u/ivan-zugec), and has been supported
   by [Morpht](https://www.drupal.org/morpht) and
