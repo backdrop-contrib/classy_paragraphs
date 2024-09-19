@@ -517,6 +517,7 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
 function classy_paragraphs_ui_classy_paragraphs_list_options_alter(&$options, $field = NULL, $instance = array()) {
   if (!empty($instance['settings']['classy_paragraphs_set'])) {
     $set = $instance['settings']['classy_paragraphs_set'];
+    $set_include = isset($instance['settings']['classy_paragraphs_set_include']) ? $instance['settings']['classy_paragraphs_set_include'] : FALSE;
   }
   else {
     $set = NULL;
@@ -526,7 +527,14 @@ function classy_paragraphs_ui_classy_paragraphs_list_options_alter(&$options, $f
 
   foreach ($classes_array as $key => $value) {
     if (!$set || (is_array($value['sets']) && !empty($value['sets'][$set]))) {
-      $options[$value['name']] = t($value['label']);
+      // Include the set name if setting enabled.
+      if (!empty($value['sets'][$set]) && $set_include) {
+        $key = $value['sets'][$set] . ' ' . $value['name'];
+      }
+      else {
+        $key = $value['name'];
+      }
+      $options[$key] = t($value['label']);
     }
   }
 }
