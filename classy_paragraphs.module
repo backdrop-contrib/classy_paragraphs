@@ -77,7 +77,7 @@ function classy_paragraphs_get_classes(ParagraphsItemEntity $item) {
     }
   }
 
-  return $classes;
+  return array_unique($classes);
 }
 
 /**
