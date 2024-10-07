@@ -119,6 +119,12 @@ function classy_paragraphs_field_instance_settings_form($field, $instance) {
         '#default_value' => isset($settings['classy_paragraphs_set']) ? $settings['classy_paragraphs_set'] : '',
         '#empty' => t('- Show all -'),
       );
+      $form['classy_paragraphs_set_include'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Include the selected set name with the class'),
+        '#description' => t('If enabled, the class set name will be included along with the class name when building the content.'),
+        '#default_value' => isset($settings['classy_paragraphs_set_include']) ? $settings['classy_paragraphs_set_include'] : FALSE,
+      );
     }
 
     return $form;

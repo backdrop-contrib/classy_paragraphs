@@ -65,12 +65,17 @@ function classy_paragraphs_get_classes(ParagraphsItemEntity $item) {
       foreach ($languages as $langcode) {
         if (!empty($item->{$field_name}[$langcode])) {
           foreach ($item->{$field_name}[$langcode] as $field_item) {
-            $classes[] = $field_item['value'];
+            // Separate out classes saved with spaces.
+            // This happens if the set name is saved with the class name.
+            $values = explode(' ', $field_item['value']);
+            foreach ($values as $value) {
+              $classes[] = $value;
+            }
           }
         }
       }
     }
   }
 
-  return $classes;
+  return array_unique($classes);
 }
