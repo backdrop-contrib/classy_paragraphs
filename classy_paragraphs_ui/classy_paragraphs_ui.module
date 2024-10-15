@@ -442,7 +442,7 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
       '#default_value' => $default_value['name'],
       '#size' => 16,
       '#maxlength' => 30,
-      '#description' => t("The class name you wish to use, which will be added to paragraphs. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
+      '#description' => t("The machine-readable class name you wish to use, which will be added to paragraphs. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
       '#required' => TRUE,
       '#element_validate' => array('form_validate_machine_name'),
       '#machine_name' => array(
@@ -494,7 +494,7 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
       '#default_value' => $default_value['name'],
       '#size' => 16,
       '#maxlength' => 30,
-      '#description' => t("The ID or machine name you wish to use for this set. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
+      '#description' => t("The machine-readable ID you wish to use for this set. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
       '#required' => TRUE,
       '#element_validate' => array('form_validate_machine_name'),
       '#machine_name' => array(
