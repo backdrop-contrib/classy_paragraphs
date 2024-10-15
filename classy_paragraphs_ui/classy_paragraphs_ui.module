@@ -108,7 +108,6 @@ function classy_paragraphs_ui_edit_class($form, &$form_state, $the_id) {
  */
 function classy_paragraphs_ui_add_class($form, &$form_state) {
   $form = array();
-
   $the_id = '';
 
   $op = 'add';
@@ -134,7 +133,6 @@ function classy_paragraphs_ui_edit_set($form, &$form_state, $the_id) {
  */
 function classy_paragraphs_ui_add_set($form, &$form_state) {
   $form = array();
-
   $the_id = '';
 
   $op = 'add-set';
@@ -147,7 +145,7 @@ function classy_paragraphs_ui_add_set($form, &$form_state) {
  * Delete class form.
  */
 function classy_paragraphs_ui_delete_class($form, &$form_state, $the_id) {
-
+  $the_id = check_plain($the_id);
   $form = array();
   $form['#action'] = '?destination=admin/config/content/classy-paragraphs-ui';
   $form['the_id'] = array(
@@ -234,6 +232,7 @@ function classy_paragraphs_ui_add_class_submit($form, &$form_state) {
  * Delete set form.
  */
 function classy_paragraphs_ui_delete_set($form, &$form_state, $the_id) {
+  $the_id = check_plain($the_id);
 
   $form = array();
   $form['#action'] = '?destination=admin/config/content/classy-paragraphs-ui';
@@ -348,6 +347,7 @@ function classy_paragraphs_ui_list() {
     $header = array('Class', 'Sets', 'Operations');
     $rows = array();
     foreach ($classes_array as $key => $value) {
+      $key = check_plain($key);
       $links = array(
         'edit' => array(
           'title' => t('Edit'),
@@ -361,11 +361,11 @@ function classy_paragraphs_ui_list() {
       $class_sets = array();
       foreach ($value['sets'] as $set) {
         if ($set) {
-          $class_sets[$set] = $sets_array[$set]['label'];
+          $class_sets[$set] = check_plain($sets_array[$set]['label']);
         }
       }
       $rows[] = array(
-        $value['label'] . ' <em>(' . $value['name'] . ')</em>',
+        check_plain($value['label']) . ' <em>(' . check_plain($value['name']) . ')</em>',
         implode(', ', $class_sets),
         array(
           'data' => array(
@@ -394,7 +394,7 @@ function classy_paragraphs_ui_list() {
         ),
       );
       $rows[] = array(
-        $value['label'] . ' <em>(' . $value['name'] . ')</em>',
+        check_plain($value['label']) . ' <em>(' . check_plain($value['name']) . ')</em>',
         array(
           'data' => array(
             '#type' => 'operations',
@@ -414,6 +414,7 @@ function classy_paragraphs_ui_list() {
  * Generate a form for adding or editing classes and sets.
  */
 function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
+  $the_id = check_plain($the_id);
   $classes_array = config_get('classy_paragraphs_ui.classes');
   $sets_array = config_get('classy_paragraphs_ui.sets');
   $form = array();
@@ -436,13 +437,19 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
       );
     }
     $form['name'] = array(
-      '#type' => 'textfield',
+      '#type' => 'machine_name',
       '#title' => t('Class'),
       '#default_value' => $default_value['name'],
       '#size' => 16,
       '#maxlength' => 30,
-      '#description' => t("The class name you wish to use, which will be added to paragraphs. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
+      '#description' => t("The machine-readable class name you wish to use, which will be added to paragraphs. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
       '#required' => TRUE,
+      '#element_validate' => array('form_validate_machine_name'),
+      '#machine_name' => array(
+        'exists' => 'classy_paragraphs_ui_class_exists',
+        'replace' => '-',
+        'replace_pattern' => '[^a-z0-9_-]+',
+      ),
     );
     $form['label'] = array(
       '#type' => 'textfield',
@@ -482,13 +489,19 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
       );
     }
     $form['name'] = array(
-      '#type' => 'textfield',
+      '#type' => 'machine_name',
       '#title' => t('Set id'),
       '#default_value' => $default_value['name'],
       '#size' => 16,
       '#maxlength' => 30,
-      '#description' => t("The ID or machine name you wish to use for this set. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
+      '#description' => t("The machine-readable ID you wish to use for this set. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
       '#required' => TRUE,
+      '#element_validate' => array('form_validate_machine_name'),
+      '#machine_name' => array(
+        'exists' => 'classy_paragraphs_ui_set_exists',
+        'replace' => '-',
+        'replace_pattern' => '[^a-z0-9_-]+',
+      ),
     );
     $form['label'] = array(
       '#type' => 'textfield',
@@ -508,6 +521,22 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
   );
   $form['#action'] = '?destination=admin/config/content/classy-paragraphs-ui';
   return $form;
+}
+
+/**
+ * Validate function for machine name on classes.
+ */
+function classy_paragraphs_ui_class_exists($element, &$form_state) {
+  $classes_array = config_get('classy_paragraphs_ui.classes');
+  return (!empty($classes_array[$element]));
+}
+
+/**
+ * Validate function for machine name on sets.
+ */
+function classy_paragraphs_ui_set_exists($element, &$form_state) {
+  $classes_array = config_get('classy_paragraphs_ui.sets');
+  return (!empty($classes_array[$element]));
 }
 
 /**
