@@ -36,3 +36,23 @@ function classy_paragraphs_ui_update_1100() {
   $old_config->clear('classy_paragraphs_settings');
   $old_config->save();
 }
+
+/**
+ * Add a weight column to each class per set.
+ */
+function classy_paragraphs_ui_update_1101() {
+  $config = config('classy_paragraphs_ui.classes');
+  $config_instances = config('classy_paragraphs_ui.class_instances');
+
+  $classes = $config->getData();
+
+  foreach ($classes as $class_name => $class) {
+    foreach ($class['sets'] as $set) {
+      $class_instance = $config_instances->get($set . '.' . $class_name);
+      if ($class_instance == NULL) {
+        $config_instances->set($set . '.' . $class_name, array('weight' => 0));
+      }
+    }
+  }
+  $config_instances->save();
+}

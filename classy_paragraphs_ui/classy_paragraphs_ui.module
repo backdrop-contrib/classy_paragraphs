@@ -65,6 +65,24 @@ function classy_paragraphs_ui_menu() {
     'page arguments' => array('classy_paragraphs_ui_delete_set', 5),
     'access arguments' => array('administer classy paragraphs ui'),
   );
+  $items['admin/config/content/classy-paragraphs-ui/set/%/classes'] = array(
+    'title' => 'Classes',
+    'title callback' => 'classy_paragraphs_ui_set_class_list_set_name',
+    'title arguments' => array(5),
+    'description' => 'Classes for Set',
+    'page callback' => 'classy_paragraphs_ui_set_class_list',
+    'page arguments' => array(5),
+    'access arguments' => array('administer classy paragraphs ui'),
+  );
+  $items['admin/config/content/classy-paragraphs-ui/set/%/class/%/edit'] = array(
+    'title' => 'Class in Set',
+    'title callback' => 'classy_paragraphs_ui_set_class_list_class_name',
+    'title arguments' => array(5, 7),
+    'description' => 'Edit class',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('classy_paragraphs_ui_edit_class_instance', 5, 7),
+    'access arguments' => array('administer classy paragraphs ui'),
+  );
   $items['admin/config/content/classy-paragraphs-ui'] = array(
     'title' => 'Classy Paragraphs',
     'description' => 'Configuration for Classy Paragraphs',
@@ -86,6 +104,10 @@ function classy_paragraphs_ui_config_info() {
   );
   $prefixes['classy_paragraphs_ui.sets'] = array(
     'label' => t('Classy Paragraphs sets'),
+    'group' => t('Paragraphs'),
+  );
+  $prefixes['classy_paragraphs_ui.class_instances'] = array(
+    'label' => t('Classy Paragraphs class instances'),
     'group' => t('Paragraphs'),
   );
   return $prefixes;
@@ -170,10 +192,17 @@ function classy_paragraphs_ui_delete_class($form, &$form_state, $the_id) {
  */
 function classy_paragraphs_ui_delete_class_submit($form, &$form_state) {
   $config = config('classy_paragraphs_ui.classes');
+  $config_instances = config('classy_paragraphs_ui.class_instances');
   $the_id = $form_state['values']['the_id'];
 
   $config->clear($the_id);
   $config->save();
+
+  $instances = $config_instances->getData();
+  foreach ($instances as $set => $instance) {
+    $config_instances->clear($set . '.' . $the_id);
+  }
+  $config_instances->save();
 
   backdrop_set_message(t('The @class class has been deleted.', array('@class' => $form_state['values']['the_id'])));
   $form_state['redirect'] = 'admin/config/content/classy-paragraphs-ui';
@@ -187,6 +216,7 @@ function classy_paragraphs_ui_edit_class_submit($form, &$form_state) {
   $the_id = $form_state['values']['the_id'];
 
   $config = config('classy_paragraphs_ui.classes');
+  $config_instances = config('classy_paragraphs_ui.class_instances');
   if ($the_id != $form_state['values']['name']) {
     // The class name was changed, so we should delete the old entry.
     $config->clear($the_id);
@@ -204,6 +234,14 @@ function classy_paragraphs_ui_edit_class_submit($form, &$form_state) {
   );
   $config->set($form_state['values']['name'], $class);
   $config->save();
+
+  foreach ($sets as $set) {
+    if ($the_id != $form_state['values']['name']) {
+      // The class name was changed, so we should delete the old entry.
+      $config_instances->clear($set . '.' . $the_id);
+    }
+  }
+  $config_instances->save();
 }
 
 /**
@@ -211,6 +249,7 @@ function classy_paragraphs_ui_edit_class_submit($form, &$form_state) {
  */
 function classy_paragraphs_ui_add_class_submit($form, &$form_state) {
   $config = config('classy_paragraphs_ui.classes');
+  $config_instances = config('classy_paragraphs_ui.class_instances');
   form_state_values_clean($form_state);
 
   if (!empty($form_state['values']['sets'])) {
@@ -226,6 +265,14 @@ function classy_paragraphs_ui_add_class_submit($form, &$form_state) {
   );
   $config->set($form_state['values']['name'], $new_class);
   $config->save();
+
+  foreach ($sets as $set) {
+    $class_instance = $config_instances->get($set . '.' . $form_state['values']['name']);
+    if ($class_instance == NULL) {
+      $config_instances->set($set . '.' . $form_state['values']['name'], array('weight' => 0));
+    }
+  }
+  $config_instances->save();
 }
 
 /**
@@ -392,6 +439,10 @@ function classy_paragraphs_ui_list() {
           'title' => t('Delete'),
           'href' => '/admin/config/content/classy-paragraphs-ui/set/' . $key . '/delete',
         ),
+        'classes' => array(
+          'title' => t('Edit classes'),
+          'href' => 'admin/config/content/classy-paragraphs-ui/set/' . $key . '/classes',
+        ),
       );
       $rows[] = array(
         check_plain($value['label']) . ' <em>(' . check_plain($value['name']) . ')</em>',
@@ -526,6 +577,133 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
 }
 
 /**
+ * Menu title callback: Return the title for the class list for a set.
+ */
+function classy_paragraphs_ui_set_class_list_set_name($set) {
+  $config = config('classy_paragraphs_ui.sets');
+  $set_info = $config->get($set);
+
+  return $set_info['label'] . t(' classes');
+}
+
+/**
+ * List of classes for a set
+ *
+ * @param string $the_id
+ *   The set ID
+ *
+ * @return string
+ *   The page output.
+ */
+function classy_paragraphs_ui_set_class_list($the_id) {
+  $output = '';
+  $classes_array = config_get('classy_paragraphs_ui.classes');
+
+  if (!empty($classes_array)) {
+    $header = array('Class', 'Operations');
+    $rows = array();
+    foreach ($classes_array as $key => $value) {
+      if (is_array($value['sets']) && !in_array($the_id, $value['sets'])) {
+        continue;
+      }
+      if (!is_array($value['sets'])) {
+        continue;
+      }
+      $key = check_plain($key);
+      $links = array(
+        'edit' => array(
+          'title' => t('Edit'),
+          'href' => '/admin/config/content/classy-paragraphs-ui/set/' . $the_id . '/class/' . $key . '/edit',
+        ),
+      );
+
+      $rows[] = array(
+        check_plain($value['label']) . ' <em>(' . check_plain($value['name']) . ')</em>',
+        array(
+          'data' => array(
+            '#type' => 'operations',
+            '#links' => $links,
+          ),
+        ),
+      );
+    }
+
+    $output .= theme('table', array('header' => $header, 'rows' => $rows));
+  }
+
+  return $output;
+}
+
+/**
+ * Menu title callback: Return the title for the class list for a set.
+ */
+function classy_paragraphs_ui_set_class_list_class_name($set, $class) {
+  $config_sets = config('classy_paragraphs_ui.sets');
+  $config_classes = config('classy_paragraphs_ui.classes');
+  $set_info = $config_sets->get($set);
+  $class_info = $config_classes->get($class);
+
+  return t('Edit @class instance for @set set', array('@class' => $class_info['label'], '@set' => $set_info['label']));
+}
+
+/**
+ * Edit class instance for a set.
+ */
+function classy_paragraphs_ui_edit_class_instance($form, &$form_state, $set, $class) {
+  $config = config('classy_paragraphs_ui.class_instances');
+
+  $class_instance = $config->get($set . '.' . $class);
+
+  $count = $class_instance ? count($config->get($set)) : 10;
+  $max = $count >= 10 ? $count : 10;
+  $weight = $class_instance ? $config->get($set . '.' . $class . '.weight') : 0;
+
+  $form = array();
+
+  $form['set'] = array(
+    '#type' => 'value',
+    '#value' => $set,
+  );
+
+  $form['class'] = array(
+    '#type' => 'value',
+    '#value' => $class,
+  );
+
+  $form['weight'] = array(
+    '#type' => 'weight',
+    '#title' => t('Weight'),
+    '#default_value' => $weight,
+    '#description' => t('The weight will sort the display of classes in a set that are displayed in a select field. A larger number is heavier than a smaller number.'),
+    '#delta' => $max,
+  );
+
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+
+  return $form;
+}
+
+/**
+ * Submit handler for class_instance.
+ */
+function classy_paragraphs_ui_edit_class_instance_submit($form, &$form_state) {
+  $set = $form_state['values']['set'];
+  $class = $form_state['values']['class'];
+
+  $config = config('classy_paragraphs_ui.class_instances');
+  $config->set($set . '.' . $class, array('weight' => $form_state['values']['weight']));
+  $config->save();
+
+  backdrop_set_message(t('The @class class has been updated for @set.', array('@class' => $class, '@set' => $set)));
+
+  $form_state['redirect'] = 'admin/config/content/classy-paragraphs-ui/set/' . $set . '/classes';
+}
+
+/**
  * Validate function for machine name on classes.
  */
 function classy_paragraphs_ui_class_exists($element, &$form_state) {
@@ -542,8 +720,7 @@ function classy_paragraphs_ui_set_exists($element, &$form_state) {
 }
 
 /**
- * @todo Please document this function.
- * @see http://drupal.org/node/1354
+ * Implements hook_classy_paragraphs_list_options_alter().
  */
 function classy_paragraphs_ui_classy_paragraphs_list_options_alter(&$options, $field = NULL, $instance = array()) {
   if (!empty($instance['settings']['classy_paragraphs_set'])) {
@@ -554,9 +731,19 @@ function classy_paragraphs_ui_classy_paragraphs_list_options_alter(&$options, $f
     $set = NULL;
   }
 
-  $classes_array = config_get('classy_paragraphs_ui.classes');
+  $classes = config_get('classy_paragraphs_ui.classes');
+  $config_instances = config('classy_paragraphs_ui.class_instances');
 
-  foreach ($classes_array as $key => $value) {
+  if ($set && !$config_instances->isNew()) {
+    $class_instances = $config_instances->get($set);
+    foreach ($class_instances as $key => $class) {
+      $class_instances[$key] = $class + $classes[$key];
+    }
+    backdrop_sort($class_instances);
+    $classes = $class_instances;
+  }
+
+  foreach ($classes as $key => $value) {
     if (!$set || (is_array($value['sets']) && !empty($value['sets'][$set]))) {
       // Include the set name if setting enabled.
       if (!empty($value['sets'][$set]) && $set_include) {
@@ -570,6 +757,9 @@ function classy_paragraphs_ui_classy_paragraphs_list_options_alter(&$options, $f
   }
 }
 
+/**
+ * Implements hook_field_widget_info_alter().
+ */
 function classy_paragraphs_ui_field_widget_info_alter(&$info) {
   // Add a setting to a widget type.
   foreach ($info as $key => $widget) {
