@@ -436,6 +436,15 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
         'sets' => array(),
       );
     }
+    $form['label'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Class label'),
+      '#default_value' => $default_value['label'],
+      '#size' => 16,
+      '#maxlength' => 30,
+      '#description' => t("The label, used for administrative screens only."),
+      '#required' => TRUE,
+    );
     $form['name'] = array(
       '#type' => 'machine_name',
       '#title' => t('Class'),
@@ -443,22 +452,14 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
       '#size' => 16,
       '#maxlength' => 30,
       '#description' => t("The machine-readable class name you wish to use, which will be added to paragraphs. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
-      '#required' => TRUE,
+      '#disabled' => empty($default_value['name']) ? FALSE : TRUE,
       '#element_validate' => array('form_validate_machine_name'),
       '#machine_name' => array(
         'exists' => 'classy_paragraphs_ui_class_exists',
+        'source' => array('label'),
         'replace' => '-',
         'replace_pattern' => '[^a-z0-9_-]+',
       ),
-    );
-    $form['label'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Label'),
-      '#default_value' => $default_value['label'],
-      '#size' => 16,
-      '#maxlength' => 30,
-      '#description' => t("The label, used for administrative screens only."),
-      '#required' => TRUE,
     );
     if (!empty($sets_array)) {
       $set_options = array();
@@ -488,21 +489,6 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
         'label' => '',
       );
     }
-    $form['name'] = array(
-      '#type' => 'machine_name',
-      '#title' => t('Set id'),
-      '#default_value' => $default_value['name'],
-      '#size' => 16,
-      '#maxlength' => 30,
-      '#description' => t("The machine-readable ID you wish to use for this set. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
-      '#required' => TRUE,
-      '#element_validate' => array('form_validate_machine_name'),
-      '#machine_name' => array(
-        'exists' => 'classy_paragraphs_ui_set_exists',
-        'replace' => '-',
-        'replace_pattern' => '[^a-z0-9_-]+',
-      ),
-    );
     $form['label'] = array(
       '#type' => 'textfield',
       '#title' => t('Label'),
@@ -511,6 +497,22 @@ function classy_paragraphs_ui_add_edit_form($form, &$form_state, $the_id, $op) {
       '#maxlength' => 30,
       '#description' => t("The label, used for administrative screens only."),
       '#required' => TRUE,
+    );
+    $form['name'] = array(
+      '#type' => 'machine_name',
+      '#title' => t('Set id'),
+      '#default_value' => $default_value['name'],
+      '#size' => 16,
+      '#maxlength' => 30,
+      '#description' => t("The machine-readable ID you wish to use for this set, which will optionally be added to paragraphs. It should contain only the characters [a-z0-9], hyphens (-) and underscores (_); it cannot start with a digit."),
+      '#disabled' => empty($default_value['name']) ? FALSE : TRUE,
+      '#element_validate' => array('form_validate_machine_name'),
+      '#machine_name' => array(
+        'exists' => 'classy_paragraphs_ui_set_exists',
+        'source' => array('label'),
+        'replace' => '-',
+        'replace_pattern' => '[^a-z0-9_-]+',
+      ),
     );
   }
 
